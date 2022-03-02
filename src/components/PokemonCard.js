@@ -1,9 +1,10 @@
-export default function PokeCard({ pokemon }) {
+export default function PokeCard( {name, img, id} ) {
+
     return (
       <article>
-        <img src={pokemon.img} alt={pokemon.name}/>
-        <h3>{pokemon.name}</h3>
-        <p>#{pokemon.id}</p>
+        <img src={img} alt={name}/>
+        <h3>{name}</h3>
+        <p>#{id}</p>
       </article>
     );
 }

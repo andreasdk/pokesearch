@@ -1,6 +1,7 @@
 import PokeCard from "./PokemonCard"
 
 export default function PokeSearch(props) {
+    console.log(props)
     return(
         <main>
             <div className="search__container">
@@ -13,15 +14,17 @@ export default function PokeSearch(props) {
                     required
                     value={props.search}
                     onChange={e => props.setSearch(e.target.value)}/>
+                    <button>Submit</button>
                 </form>
             </div>
             <div className="pokemon__list">
-            {props.PokemonList.map(pokemon => (
+            
 					<PokeCard
-						name={pokemon.name}
-						key={pokemon.id}
-                        img={pokemon.sprites.front_default} />
-				))}
+						name={props.pokemonList[0]}
+
+                        id={props.pokemonList[1]}
+                        img={props.pokemonList[2]} />
+			
             </div>
         </main>
     )

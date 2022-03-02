@@ -1,13 +1,14 @@
 
 import './App.css';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import PokeSearch from './components/PokemonSearch';
 
 function App() {
-  const [PokemonList, SetPokemonList] = useState([]);
-	const [search, SetSearch] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
+  const [pokemonList, setPokemonList] = useState([]);
+	const [search, setSearch] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
 
   const api = {
     base: "https://pokeapi.co/api/v2/pokemon"
@@ -16,38 +17,42 @@ function App() {
   const HandleSearch = e => {
 		e.preventDefault();
 		FetchPokemon(search);
+    
 	}
 
-  const FetchPokemon = async (query) => {
-		const temp = await fetch(`${api.base}/${query}`)
+  const FetchPokemon = (query) => {
+    setIsLoading(true); 
+		return fetch(`${api.base}/${query}`)
     .then((res) => {
       return res.json();
     })
     .then((data) => {
-      return data;        
+      const pokemonName = data.name;
+      const pokemonID = data.id;
+      const pokemonImg = data.sprites.front_default;
+      const PokemonData = [pokemonName, pokemonID, pokemonImg]
+      // console.log(PokemonData);
+      // setPokemonList(PokemonData);
+      // console.log(pokemonList) 
+      setIsLoading(false);
+      return PokemonData;       
     })
-    .then(()=> {
-      return SetPokemonList(temp.results)
+    .then((data)=> {
+      setPokemonList(data);
+      console.log(pokemonList)
     })
 	}
 
-  useEffect(() => {
-		FetchPokemon()
-    .then(()=> {
-      setIsLoading(false);
-    })
-    
-   
-	}, []);
   
+  if (isLoading) return <p>Loading...</p>;
   return (
-    isLoading ? <p>loading</p> : 
+
     <div className="App">
     <PokeSearch
 					HandleSearch={HandleSearch}
 					search={search}
-					setSearch={SetSearch}
-					PokemonList={PokemonList} />
+					setSearch={setSearch}
+					pokemonList={pokemonList} />
     </div>
   );
 }
